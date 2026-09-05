@@ -1,0 +1,23 @@
+TechNova Customer Support Policy
+Effective Date: April 1, 2026
+
+1. Customer support is available Monday through Saturday.
+2. Support hours are 9:00 AM to 6:00 PM IST.
+3. Customer support is closed on Sundays.
+4. Support is available through email, live chat, and the customer support portal.
+5. The official customer support email is support@technova.example.
+6. Live chat is available during regular support hours.
+7. Email support normally responds within 24 hours.
+8. Support portal requests normally receive a response within 1 business day.
+9. Live-chat requests are normally answered within 5 minutes.
+10. Customers should provide their order number when contacting support about an order.
+11. Warranty cases require the product serial number.
+12. Refund requests must be submitted through the refund request form.
+13. Support agents can provide order status and tracking information.
+14. Support agents cannot change the original payment method used for an order.
+15. Billing disputes are forwarded to the billing team for investigation.
+16. Billing investigations normally take up to 3 business days.
+17. Unresolved support cases can be escalated to a senior support specialist.
+18. Customers may request escalation after 2 unsuccessful support responses.
+19. Senior support specialists normally respond to escalated cases within 2 business days.
+20. Customers can check the status of an open support case using their case number.

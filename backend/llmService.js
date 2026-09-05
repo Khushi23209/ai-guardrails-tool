@@ -10,3 +10,5 @@ async function getChatResponse(userMessage) {
 
 module.exports = { getChatResponse };
 
+require('dotenv').config();
+getChatResponse("What is 2+2?").then(console.log);

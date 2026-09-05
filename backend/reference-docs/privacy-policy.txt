@@ -1,0 +1,23 @@
+TechNova Privacy Policy
+Effective Date: February 1, 2026
+
+1. TechNova collects the customer's name, email address, billing address, and shipping address.
+2. Phone numbers are collected only when customers provide them during checkout or support requests.
+3. TechNova collects order numbers and purchase history to provide order-related services.
+4. Payment card numbers are processed by certified payment providers and are not stored on TechNova's servers.
+5. Website usage data includes browser type, device type, IP address, and pages visited.
+6. TechNova uses cookies to maintain login sessions and remember shopping-cart contents.
+7. Analytics cookies may be disabled through the website's cookie settings.
+8. Customer account data is stored using encrypted databases.
+9. Passwords are stored using one-way cryptographic hashing.
+10. TechNova retains completed order records for 7 years for accounting and legal requirements.
+11. Customer support messages are retained for 3 years after the support case is closed.
+12. Customers may request deletion of their account data through the privacy request form.
+13. Deletion requests are normally completed within 30 calendar days.
+14. Certain records may be retained when required by law or for fraud prevention.
+15. TechNova does not sell customer personal information to advertising companies.
+16. Customer information may be shared with payment processors to complete transactions.
+17. Shipping information may be shared with delivery companies to fulfill orders.
+18. TechNova may share information with government authorities when legally required.
+19. Employees can access customer information only when it is necessary for their job responsibilities.
+20. Privacy questions can be submitted to privacy@technova.example.
