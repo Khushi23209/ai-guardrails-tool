@@ -1,6 +1,5 @@
-require('dotenv').config();
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const Groq = require("groq-sdk");
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 async function rerankResults(query, chunks){
     const prompt = `You are a relevance scorer. Given a query and a list of text chunks, score each chunk from 0.0 to 1.0 on how directly it answers the query.
@@ -15,12 +14,17 @@ async function rerankResults(query, chunks){
             {"index": 0, "score": 0.95, "reason": "brief reason"},
             {"index": 1, "score": 0.3, "reason": "brief reason"}
         ]`;
-        const model = genAI.getGenerativeModel({ model: "gemini-3.6-flash" });
+
         try {
-            const result = await model.generateContent(prompt);
-            const text = result.response.text();
+            const response = await groq.chat.completions.create({
+                model: "openai/gpt-oss-20b",
+                messages: [{ role: "user", content: prompt }]
+            });
+            const text = response.choices[0].message.content;
             const cleaned = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-            const scores = JSON.parse(cleaned);
+            const jsonMatch = cleaned.match(/\[[\s\S]*\]/);
+            if (!jsonMatch) throw new Error("No JSON array found");
+            const scores = JSON.parse(jsonMatch[0]);
 
             const reranked = scores.map(s => ({
                 ...chunks[s.index],

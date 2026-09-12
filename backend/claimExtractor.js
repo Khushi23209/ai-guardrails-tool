@@ -1,9 +1,7 @@
+const Groq = require("groq-sdk");
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
-async function extractClaims (text){
-    const model = genAI.getGenerativeModel({ model: "gemini-3.6-flash" });
+async function extractClaims(text) {
     const prompt = `You are a claim extractor. Given a text response, extract all individual factual claims that can be verified against reference documents.
 
         Skip greetings, opinions, questions, and filler phrases. Only extract concrete factual statements.
@@ -17,15 +15,21 @@ async function extractClaims (text){
         ]
 
         If there are no factual claims, return an empty array: []`;
-    try{
-        const result = await model.generateContent(prompt);
-       const responseText = result.response.text();
-        const cleaned = responseText.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-       const parsed = JSON.parse(cleaned);
+    try {
+        const response = await groq.chat.completions.create({
+            model: "openai/gpt-oss-120b",
+            messages: [{ role: "user", content: prompt }]
+        });
+        const text2 = response.choices[0].message.content;
+        const cleaned = text2.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+        const jsonMatch = cleaned.match(/\[[\s\S]*\]/);
+        if (!jsonMatch) throw new Error("No JSON array found");
+        const parsed = JSON.parse(jsonMatch[0]);
         return parsed;
-    }catch (error){
+    } catch (error) {
         console.error("Claim extraction failed:", error.message);
         return [];
     }
 }
+
 module.exports = { extractClaims };

@@ -1,7 +1,9 @@
 const { retrieve } = require("./retriever");
 const { extractClaims } = require("./claimExtractor");
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const Groq = require("groq-sdk");
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+
+function delay(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
 
 async function checkGrounding(llmResponse) {
     const claims = await extractClaims(llmResponse);
@@ -9,11 +11,10 @@ async function checkGrounding(llmResponse) {
         return { overallScore: 1.0, claims: [], message: "No factual claims to verify" };
     }
 
-    const model = genAI.getGenerativeModel({ model: "gemini-3.6-flash" });
     const results = [];
 
     for (const c of claims) {
-        await delay(2000)
+        await delay(2000);
         const chunks = await retrieve(c.claim, 3);
         const prompt = `You are a grounding evaluator. Given a claim and supporting evidence chunks, score how well the evidence supports the claim.
 
@@ -36,10 +37,15 @@ async function checkGrounding(llmResponse) {
             }`;
 
         try {
-            const result = await model.generateContent(prompt);
-            const text = result.response.text();
+            const response = await groq.chat.completions.create({
+                model: "openai/gpt-oss-20b",
+                messages: [{ role: "user", content: prompt }]
+            });
+            const text = response.choices[0].message.content;
             const cleaned = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-            const parsed = JSON.parse(cleaned);
+            const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+            if (!jsonMatch) throw new Error("No JSON object found");
+            const parsed = JSON.parse(jsonMatch[0]);
             results.push({
                 claim: c.claim,
                 score: parsed.score,
