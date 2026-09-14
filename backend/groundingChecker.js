@@ -11,9 +11,10 @@ async function checkGrounding(llmResponse) {
         return { overallScore: 1.0, claims: [], message: "No factual claims to verify" };
     }
 
+    const claimsToCheck = claims.slice(0, 5);
     const results = [];
 
-    for (const c of claims) {
+    for (const c of claimsToCheck)  {
         await delay(2000);
         const chunks = await retrieve(c.claim, 3);
         const prompt = `You are a grounding evaluator. Given a claim and supporting evidence chunks, score how well the evidence supports the claim.

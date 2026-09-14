@@ -92,6 +92,28 @@ app.get("/api/stats", async (req, res) => {
         res.status(500).json({ error: "Failed to fetch stats" });
     }
 });
+app.post("/api/check", async (req, res) => {
+    const { userMessage, llmResponse } = req.body;
+    const startTime = Date.now();
+
+    const preResult = await preCheck(userMessage);
+    const postResult = await postCheck(llmResponse);
+
+    const allPiiFindings = [...preResult.ppiFindings, ...postResult.ppiFindings];
+    const hasPII = allPiiFindings.length > 0;
+    const hasInjection = preResult.injectionResult.isInjection === true;
+    const groundingResult = postResult.groundingResult;
+    const hasHallucination = groundingResult.overallScore < 0.5;
+    const latency = Date.now() - startTime;
+
+    res.json({
+        pii: allPiiFindings,
+        injection: preResult.injectionResult,
+        grounding: groundingResult,
+        flagged: hasPII || hasInjection || hasHallucination,
+        latency_ms: latency
+    });
+});
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);

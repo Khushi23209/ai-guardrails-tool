@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import StatsBar from "./components/StatsBar";
+import ChatPanel from "./components/ChatPanel";
 import LogsTable from "./components/LogsTable";
 import LogDetail from "./components/LogDetail";
 import "./App.css";
@@ -34,7 +35,10 @@ function App() {
 
     const filteredLogs = logs
         .filter(log => {
-            if (filter === "pii") return log.pii_detected && JSON.parse(log.pii_detected).length > 0;
+            if (filter === "pii") {
+                const pii = typeof log.pii_detected === "string" ? JSON.parse(log.pii_detected) : log.pii_detected;
+                return pii && pii.length > 0;
+            }
             if (filter === "injection") return log.prompt_injection_detected;
             if (filter === "hallucination") return log.hallucination_score !== null && log.hallucination_score < 0.5;
             return true;
@@ -55,6 +59,7 @@ function App() {
         <div className="app">
             <h1>AI Guardrails Dashboard</h1>
             <StatsBar stats={stats} />
+            <ChatPanel onNewMessage={fetchData} />
             <div className="controls">
                 <div className="filter-bar">
                     <button onClick={() => setFilter("all")} className={filter === "all" ? "active" : ""}>All</button>
