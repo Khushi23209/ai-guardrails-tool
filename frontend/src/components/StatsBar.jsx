@@ -1,5 +1,6 @@
 function StatsBar({ stats }) {
-    if (!stats) return <p>Loading stats...</p>;
+     if (!stats) return <p className="loading-msg">Waking up the server — free tier takes 30-60 seconds on first load...</p>;
+
 
     return (
         <div className="stats-bar">
